@@ -8,7 +8,7 @@ namespace ConsoleApp1
 {
     class Class
     {
-
+        //lets start ma boizz
         public static void Main(string[] args)
         {
             bool IsTalk = false;
