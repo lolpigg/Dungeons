@@ -11,6 +11,8 @@ namespace ConsoleApp1
         //lets start ma boizz
         public static void Main(string[] args)
         {
+            bool TalkTalk = false;
+            bool RewardNPC = false;
             bool IsTalk = false;
             int Heal = 40;
             bool Book = false;
@@ -21,6 +23,7 @@ namespace ConsoleApp1
             int HeavyDef = 12;
             int Money = 0;
             int Weapon = 0;
+            bool BookReject = false;
             int WeaponDmg = 0;
             int WeaponDef = 0;
             int SwordDef = 0;
@@ -36,7 +39,7 @@ namespace ConsoleApp1
             int EnemyHp = 50;
             int PlayerHp = 100;
             int EnemyDmg = 15;
-            int PlayerDmg = 5 + Weapon;
+            int PlayerDmg = 5 + WeaponDmg;
             var IsFight = true;
             dynamic[] Invenetary = { Money, Weapon };
 
@@ -82,7 +85,7 @@ namespace ConsoleApp1
                     y = yb;
                     x = xb;
                     IsTalk = true;
-                    if (Book == true && IsTalk == true) 
+                    if (Book == true && IsTalk == true && BookReject == false) 
                     {
                         Console.WriteLine("Здравствуй, приключенец! Проходи, посмотри на мои товары.");
                         Console.WriteLine("Я чую ауру книги у тебя в рюкзаке. Я куплю ее за 300 монет.\nY - Принять N - Отказ");
@@ -111,13 +114,14 @@ namespace ConsoleApp1
                                     case ConsoleKey.N:
                                         Console.WriteLine("Эх, зря вы так, я ведь предложил хорошую цену!");
                                         IsTalk = false;
+                                        BookReject = true;
                                         break;
                                 }
                                 break;
                             default: return;
                         }
                     }
-                    if (Book == false && IsTalk == true)
+                    if (Book == false && IsTalk == true || Book == true && IsTalk == true && BookReject == true)
                     {
                     Console.WriteLine("Привет! Хочешь что-нибудь купить?");
                     Console.WriteLine($"Ваш баланс - {Money} монет.");
@@ -225,20 +229,30 @@ namespace ConsoleApp1
                 {
                     y = yb;
                     x = xb;
-                    TalkToNPC = true;
-                    if (EnemyDead == false)
+                    if ((EnemyDead == false) && (TalkToNPC == false))
                     {
                         Console.WriteLine("Здравствуй путник! Меня зовут Витя! Что привело тебя в эти темные и непроглядные пучины подземелья?");
-                        Console.WriteLine("Помоги мне убить монстра и я тебя вознагражу! Для начала тебе нужно купить оружие. Держи 70 монет для покупки меча.");
+                        Console.WriteLine("Помоги мне убить монстра и я тебя вознагражу! Для начала тебе нужно купить оружие. Держи 80 монет для покупки меча.");
                         Money = Money + 80;
                         Console.WriteLine($"У вас теперь {Money} монет.");
+                        TalkToNPC = true;
+                        TalkTalk = true;
                     }
-                    else if (EnemyDead == true)
+                    else if ((EnemyDead == true) && (RewardNPC == false))
                     {
                         Console.WriteLine("Ты убил его! Огромное тебе спасибо. Вот, возьми это в качестве платы.");
                         Console.WriteLine("Вы получили 150 золотых монет!");
                         Money = Money + 150;
                         Console.WriteLine($"У вас теперь {Money} монет.");
+                        RewardNPC = true;
+                    }
+                    else if ((EnemyDead == false) && (TalkToNPC == true))
+                    {
+                        Console.WriteLine("Прошу, поторопись. Не стоит заставлять монстра ждать, он многое может натворить.");
+                    }
+                    else if ((EnemyDead == true) && (RewardNPC == true))
+                    {
+                        Console.WriteLine("О, мой дорогой друг! Я снова нуждаюсь в твоей помощи. \nМой давний знакомый задолжал мне деньги. Половина твоя. Он находится в соседней комнате, удачи!");
                     }
                 }
                 if (zone[y, x] == " X")
@@ -249,7 +263,11 @@ namespace ConsoleApp1
                     {
                         Console.WriteLine("Вы встретили монстра! Он опасен, лучше не драться с ним без причины.");
                     }
-                    if (TalkToNPC == true)
+                    if (TalkToNPC == true && EnemyDead == true)
+                    {
+                        Console.WriteLine("Вы горделиво возвышаетесь над трупом поверженного монстра. \nДля других - это мелочь, а для вас - первая победа в вашем приключении.");
+                    }
+                    if ((TalkToNPC == true) && (EnemyDead == false))
                     {
                         Console.WriteLine("Вы встретили монстра, о котором говорил Витя!");
                         IsFight = true;
@@ -282,7 +300,7 @@ namespace ConsoleApp1
                                     break;
                                 case ConsoleKey.A:
                                     PlayerHp = PlayerHp - (EnemyDmg - WeaponDef - ArmorDef);
-                                    EnemyHp = EnemyHp - PlayerDmg;
+                                    EnemyHp = EnemyHp - WeaponDmg - 5;
                                     Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
                                     Console.WriteLine($"Здоровье врага - {EnemyHp}.");
                                     break;
