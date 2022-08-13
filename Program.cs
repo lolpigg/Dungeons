@@ -127,6 +127,7 @@ namespace ConsoleApp1
                     Console.WriteLine($"Ваш баланс - {Money} монет.");
                     Console.WriteLine("Легкие доспехи - 150(A), Тяжелые доспехи - 350(S), Щит - 150(D)");
                     Console.WriteLine("Лук - 100(F), Меч - 80(G), Зелье Исцеления - 30(H)");
+                    Console.WriteLine("Выйти - W");
                     ConsoleKeyInfo BuyMenu = Console.ReadKey(true);
                     switch (BuyMenu.Key)
                     {
@@ -217,10 +218,12 @@ namespace ConsoleApp1
                                     IsTalk = false;
                             }
                             break;
+                        case ConsoleKey.W:
+                                break;
                         default:
                             {
                                 Console.WriteLine("У меня всего 6 ячеек с предметами. Введите номер ячейки.");
-                                return;
+                                break;
                             }
                        }
                     }
@@ -346,7 +349,7 @@ namespace ConsoleApp1
                 _proto_zone.RenderZone(zone, y, x);
 
                 //Управление
-                ConsoleKey consoleKey = Console.ReadKey().Key;
+                ConsoleKey consoleKey = Console.ReadKey(true).Key;
                 switch (consoleKey)
                 {
                     case ConsoleKey.S:
