@@ -34,6 +34,7 @@ namespace ConsoleApp1
             int ShieldDef = 12;
             string[,] zone = new string[9, 16];
             Zone _proto_zone = new Zone();
+            _proto_zone.ZoneId = 1; // Номер зоны
             bool EnemyDead = false;
             bool TalkToNPC = false;
             int EnemyHp = 50;
@@ -49,8 +50,117 @@ namespace ConsoleApp1
             //Буфер
             int yb = y, xb = x;
 
+
             while (true)
             {
+            void Room1()
+                {
+                    for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
+                    {
+                        zone[i, 0] = "| ";
+                        zone[i, 15] = " |";
+
+                        for (int j = 0; j < zone.GetUpperBound(1) + 1 /* x */; j++)
+                        {
+                            zone[0, j] = "__";
+                            zone[8, j] = "__";
+                            switch (i, j)
+                            {
+                                case (3, 6):
+                                case (3, 5):
+                                case (4, 5):
+                                    zone[i, j] = " #";
+                                    break;
+                                case (3, 15):
+                                case (5, 15):
+                                case (4, 15):
+                                case (6, 15):
+                                    zone[i, j] = " )";
+                                    break;
+                                case (4, 6):
+                                    zone[i, j] = " ?";
+                                    break;
+                                case (7, 13):
+                                    zone[i, j] = " X";
+                                    break;
+                                case (5, 9):
+                                    zone[i, j] = " Ш";
+                                    break;
+                                case (2, 14):
+                                    zone[i, j] = " M";
+                                    break;
+                                case (8, 0):
+                                    zone[i, j] = "|_";
+                                    break;
+                                case (8, 15):
+                                    zone[i, j] = "_|";
+                                    break;
+                                case (7, 8):
+                                    zone[i, j] = " D";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            Console.Write($" {zone[i, j]}");
+                        }
+                        Console.WriteLine("");
+
+                    }
+                }
+                void Room2(string[,] zone, int y, int x)
+                {
+                    for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
+                    {
+                        zone[i, 0] = "| ";
+                        zone[i, 15] = " |";
+
+                        for (int j = 0; j < zone.GetUpperBound(1) + 1 /* x */; j++)
+                        {
+                            zone[0, j] = "__";
+                            zone[8, j] = "__";
+                            switch (i, j)
+                            {
+                                case (3, 6):
+                                case (3, 5):
+                                case (4, 5):
+                                    zone[i, j] = " #";
+                                    break;
+                                case (3, 15):
+                                case (5, 15):
+                                case (4, 15):
+                                case (6, 15):
+                                    zone[i, j] = " )";
+                                    break;
+                                case (4, 6):
+                                    zone[i, j] = " ?";
+                                    break;
+                                case (7, 13):
+                                    zone[i, j] = " X";
+                                    break;
+                                case (5, 9):
+                                    zone[i, j] = " Ш";
+                                    break;
+                                case (2, 14):
+                                    zone[i, j] = " M";
+                                    break;
+                                case (8, 0):
+                                    zone[i, j] = "|_";
+                                    break;
+                                case (8, 15):
+                                    zone[i, j] = "_|";
+                                    break;
+                                case (7, 8):
+                                    zone[i, j] = " D";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            Console.Write($" {zone[i, j]}");
+                        }
+                        Console.WriteLine("");
+
+                    }
+                }
                 isSolid = zone[y, x] == " #" || zone[y, x] == " |" || zone[y, x] == "| "
                        || zone[y, x] == "__" || zone[y, x] == "|_" || zone[y, x] == "_|";
                 void Solid(int y, int x, int yb, int xb)
@@ -386,10 +496,17 @@ namespace ConsoleApp1
                         switch (HealingDoctor.Key)
                         {
                             case ConsoleKey.Y:
+                                if (Money >= 20)
+                                { 
                                 Money = Money - 20;
                                 PlayerHp = 100;
                                 Console.WriteLine("Paratus! Вы полностью излечены.");
                                 Console.WriteLine($"У вас теперь {Money} монет.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                }
                                 break;
                             case ConsoleKey.N:
                                 Console.WriteLine("Ut dicis.");
@@ -407,9 +524,21 @@ namespace ConsoleApp1
                 _proto_zone.RenderPlayer(zone, y, x);
 
                 //Заполнение поля / set
-                Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg+5}\nМонет: {Money} Зелий: {Potion}\n");
+                if (_proto_zone.ZoneId == 1)
+                {
+                    Console.Clear();
+                    Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg+5}\nМонет: {Money} Зелий: {Potion}\n");
+                Console.WriteLine($"x: {x} y: {y}");
+                    _proto_zone.RenderZone1(zone, y, x);
+                }
+                if (zone[y, x] == " )")
+                {
+                    _proto_zone.ZoneId = 2;
+                    Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5}\nМонет: {Money} Зелий: {Potion}\n");
+                    x = 2;
+                    Room2(zone,y,x);
 
-                _proto_zone.RenderZone(zone, y, x);
+                }
 
                 //Управление
                 ConsoleKey consoleKey = Console.ReadKey(true).Key;
@@ -431,7 +560,6 @@ namespace ConsoleApp1
                         
                         break;
                 }
-
                 Console.Clear();
 
             }

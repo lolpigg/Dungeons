@@ -5,76 +5,69 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-//internal class Player : Weapon
-//{
-//    public Player(Weapon weapon)
-//    {
-//        Money = 0;
-//        Hp = 100;
-//        Strenght = 5;
-//        Dmg = Strenght + weapon.Dmg;
+internal class Player : Weapon
+{
+    public Player(Weapon weapon)
+    {
+        Money = 0;
+        Hp = 100;
+        Strenght = 5;
+        Dmg = Strenght + weapon.Dmg;
 
-//    }
-//    public Player()
-//    {
-//        Money = 0;
-//        Hp = 100;
-//        Strenght = 5;
-//        Dmg = Strenght;
-//    }
-//    public int Money;
-//    private int hp;
+    }
+    public Player()
+    {
+        Money = 0;
+        Hp = 100;
+        Strenght = 5;
+        Dmg = Strenght;
+    }
+    public int Money;
+    private int hp;
 
-//    public int Hp
-//    {
-//        get { return hp; }
-//        set { hp = value; }
-//    }
+    public int Hp
+    {
+        get { return hp; }
+        set { hp = value; }
+    }
 
-//    private static int Strenght;
-//    public int Dmg;
-//    void Quest()
-//    {
+    private static int Strenght;
+    public int Dmg;
 
-//    }
-//}
-//internal class Weapon
-//{
-//    int Def { get; set; }
-//    int SwordDmg = 15;
-//    int BowDmg = 12;
-//    int BowDef = 5;
-//    int Shield = 5;
-//    int ShieldDef = 18;
-//}
+}
+internal class Weapon
+{
+    int Def { get; set; }
+    public int Dmg { get; set; } 
+}
 
-//class Sword : Weapon
-//{
-//    public int Def;
+class Sword : Weapon
+{
+    public int Def;
 
-//    public int Dmg;
-//    Sword()
-//    {
-        
-//    }
+    public int Dmg;
+    Sword()
+    {
 
-//}
-//class Shield : Weapon
-//{
-//    private int def = 15;
+    }
 
-//    public int Def
-//    {
-//        get { return def; }
-//        private set { }
-//    }
+}
+class Shield : Weapon
+{
+    private int def = 12;
 
-//    public int Dmg { get; private set; }
-//}
-//class Bow : Weapon
-//{
+    public int Def
+    {
+        get { return def; }
+        private set { }
+    }
 
-//}
+    public int Dmg { get; private set; }
+}
+class Bow : Weapon
+{
+
+}
 internal struct Zone
 {
     public string Name { get; set; }
@@ -100,7 +93,7 @@ internal struct Zone
             }
         }
     }
-    public void RenderZone(string[,] zone, int y, int x)
+    public void RenderZone1(string[,] zone, int y, int x)
     {
         for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
         {
@@ -117,6 +110,12 @@ internal struct Zone
                     case (3, 5):
                     case (4, 5):
                         zone[i, j] = " #";
+                        break;
+                    case (3, 15):
+                    case (5, 15):
+                    case (4, 15):
+                    case (6, 15):
+                        zone[i, j] = " )";
                         break;
                     case (4, 6):
                         zone[i, j] = " ?";
@@ -140,6 +139,35 @@ internal struct Zone
                         zone[i, j] = " D";
                         break;
                     default:
+                        break;
+                }
+                Console.Write($" {zone[i, j]}");
+            }
+            Console.WriteLine("");
+
+        }
+    }
+    public void RenderZone2(string[,] zone, int y, int x)
+    {
+        for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
+        {
+            zone[i, 0] = "| ";
+            zone[i, 15] = " |";
+
+            for (int j = 0; j < zone.GetUpperBound(1) + 1 /* x */; j++)
+            {
+                zone[0, j] = "__";
+                zone[8, j] = "__";
+                switch (i, j)
+                {
+                    case (8, 0):
+                        zone[i, j] = "|_";
+                        break;
+                    case (8, 15):
+                        zone[i, j] = "_|";
+                        break;
+                    default:
+                        zone[i, j] = " .";
                         break;
                 }
                 Console.Write($" {zone[i, j]}");
