@@ -34,7 +34,7 @@ namespace ConsoleApp1
             int ShieldDef = 12;
             string[,] zone = new string[9, 16];
             Zone _proto_zone = new Zone();
-            _proto_zone.ZoneId = 1; // Номер зоны
+            _proto_zone.ZoneId = 1;              // Номер зоны
             bool EnemyDead = false;
             bool TalkToNPC = false;
             int EnemyHp = 50;
@@ -53,121 +53,17 @@ namespace ConsoleApp1
 
             while (true)
             {
-            void Room1()
+                void Room1(string[,] zone, int y, int x)
                 {
-                    for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
-                    {
-                        zone[i, 0] = "| ";
-                        zone[i, 15] = " |";
-
-                        for (int j = 0; j < zone.GetUpperBound(1) + 1 /* x */; j++)
-                        {
-                            zone[0, j] = "__";
-                            zone[8, j] = "__";
-                            switch (i, j)
-                            {
-                                case (3, 6):
-                                case (3, 5):
-                                case (4, 5):
-                                    zone[i, j] = " #";
-                                    break;
-                                case (3, 15):
-                                case (5, 15):
-                                case (4, 15):
-                                case (6, 15):
-                                    zone[i, j] = " )";
-                                    break;
-                                case (4, 6):
-                                    zone[i, j] = " ?";
-                                    break;
-                                case (7, 13):
-                                    zone[i, j] = " X";
-                                    break;
-                                case (5, 9):
-                                    zone[i, j] = " Ш";
-                                    break;
-                                case (2, 14):
-                                    zone[i, j] = " M";
-                                    break;
-                                case (8, 0):
-                                    zone[i, j] = "|_";
-                                    break;
-                                case (8, 15):
-                                    zone[i, j] = "_|";
-                                    break;
-                                case (7, 8):
-                                    zone[i, j] = " D";
-                                    break;
-                                default:
-                                    break;
-                            }
-                            Console.Write($" {zone[i, j]}");
-                        }
-                        Console.WriteLine("");
-
-                    }
+                    _proto_zone.RenderZone1(zone, y, x);
                 }
                 void Room2(string[,] zone, int y, int x)
                 {
-                    for (int i = 0; i < zone.GetUpperBound(0) + 1 /* y */; i++)
-                    {
-                        zone[i, 0] = "| ";
-                        zone[i, 15] = " |";
-
-                        for (int j = 0; j < zone.GetUpperBound(1) + 1 /* x */; j++)
-                        {
-                            zone[0, j] = "__";
-                            zone[8, j] = "__";
-                            switch (i, j)
-                            {
-                                case (3, 6):
-                                case (3, 5):
-                                case (4, 5):
-                                    zone[i, j] = " #";
-                                    break;
-                                case (3, 15):
-                                case (5, 15):
-                                case (4, 15):
-                                case (6, 15):
-                                    zone[i, j] = " )";
-                                    break;
-                                case (4, 6):
-                                    zone[i, j] = " ?";
-                                    break;
-                                case (7, 13):
-                                    zone[i, j] = " X";
-                                    break;
-                                case (5, 9):
-                                    zone[i, j] = " Ш";
-                                    break;
-                                case (2, 14):
-                                    zone[i, j] = " M";
-                                    break;
-                                case (8, 0):
-                                    zone[i, j] = "|_";
-                                    break;
-                                case (8, 15):
-                                    zone[i, j] = "_|";
-                                    break;
-                                case (7, 8):
-                                    zone[i, j] = " D";
-                                    break;
-                                default:
-                                    break;
-                            }
-                            Console.Write($" {zone[i, j]}");
-                        }
-                        Console.WriteLine("");
-
-                    }
+                    _proto_zone.RenderZone2(zone, y, x);
                 }
                 isSolid = zone[y, x] == " #" || zone[y, x] == " |" || zone[y, x] == "| "
                        || zone[y, x] == "__" || zone[y, x] == "|_" || zone[y, x] == "_|";
-                void Solid(int y, int x, int yb, int xb)
-                {
-                    y = yb;
-                    x = xb;
-                }
+
                 if (isSolid)
                 {
                     y = yb;
@@ -195,7 +91,7 @@ namespace ConsoleApp1
                     y = yb;
                     x = xb;
                     IsTalk = true;
-                    if (Book == true && IsTalk == true && BookReject == false) 
+                    if (Book == true && IsTalk == true && BookReject == false)
                     {
                         Console.WriteLine("Здравствуй, приключенец! Проходи, посмотри на мои товары.");
                         Console.WriteLine("Я чую ауру книги у тебя в рюкзаке. Я куплю ее за 300 монет.\nY - Принять N - Отказ");
@@ -233,109 +129,109 @@ namespace ConsoleApp1
                     }
                     if (Book == false && IsTalk == true || Book == true && IsTalk == true && BookReject == true)
                     {
-                    Console.WriteLine("Привет! Хочешь что-нибудь купить?");
-                    Console.WriteLine($"Ваш баланс - {Money} монет.");
-                    Console.WriteLine("Легкие доспехи - 150(A), Тяжелые доспехи - 350(S), Щит - 150(D)");
-                    Console.WriteLine("Лук - 100(F), Меч - 80(G), Зелье Исцеления - 30(H)");
-                    Console.WriteLine("Выйти - W");
-                    ConsoleKeyInfo BuyMenu = Console.ReadKey(true);
-                    switch (BuyMenu.Key)
-                    {
-                        case ConsoleKey.A:
-                            if (Money >= 150)
-                            {
-                                Money = Money - 150;
-                                Console.WriteLine($"Вы купили Легкие доспехи! У вас осталось {Money} монет.");
-                                ArmorDef = LightDef;
-                                IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
+                        Console.WriteLine("Привет! Хочешь что-нибудь купить?");
+                        Console.WriteLine($"Ваш баланс - {Money} монет.");
+                        Console.WriteLine("Легкие доспехи - 150(A), Тяжелые доспехи - 350(S), Щит - 150(D)");
+                        Console.WriteLine("Лук - 100(F), Меч - 80(G), Зелье Исцеления - 30(H)");
+                        Console.WriteLine("Выйти - W");
+                        ConsoleKeyInfo BuyMenu = Console.ReadKey(true);
+                        switch (BuyMenu.Key)
+                        {
+                            case ConsoleKey.A:
+                                if (Money >= 150)
+                                {
+                                    Money = Money - 150;
+                                    Console.WriteLine($"Вы купили Легкие доспехи! У вас осталось {Money} монет.");
+                                    ArmorDef = LightDef;
                                     IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.S:
-                            if (Money >= 350)
-                            {
-                                Money = Money - 350;
-                                Console.WriteLine($"Вы купили Тяжелые доспехи! У вас осталось {Money} монет.");
-                                ArmorDef = HeavyDef;
-                                IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
                                     IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.D:
-                            if (Money >= 150)
-                            {
-                                Money = Money - 150;
-                                Console.WriteLine($"Вы купили Щит! У вас осталось {Money} монет.");
-                                WeaponDef = ShieldDef;
-                                WeaponDmg = ShieldDmg;
-                                IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
-                                    IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.F:
-                            if (Money >= 100)
-                            {
-                                Money = Money - 100;
-                                Console.WriteLine($"Вы купили Лук! У вас осталось {Money} монет.");
-                                WeaponDef = BowDef;
-                                WeaponDmg = BowDmg;
-                                    IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
-                                IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.G:
-                            if (Money >= 80)
-                            {
-                                Money = Money - 80;
-                                Console.WriteLine($"Вы купили Меч! У вас осталось {Money} монет.");
-                                WeaponDef = SwordDef;
-                                WeaponDmg = SwordDmg;
-                                IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
-                                IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.H:
-                            if (Money >= 30)
-                            {
-                                Money = Money - 30;
-                                Console.WriteLine($"Вы купили Зелье исцеления! У вас осталось {Money} монет.");
-                                Potion++;
-                                IsTalk = false;
-                            }
-                            else
-                            {
-                                Console.WriteLine("У вас недостаточно денег.");
-                                    IsTalk = false;
-                            }
-                            break;
-                        case ConsoleKey.W:
+                                }
                                 break;
-                        default:
-                            {
-                                Console.WriteLine("У меня всего 6 ячеек с предметами. Введите номер ячейки.");
+                            case ConsoleKey.S:
+                                if (Money >= 350)
+                                {
+                                    Money = Money - 350;
+                                    Console.WriteLine($"Вы купили Тяжелые доспехи! У вас осталось {Money} монет.");
+                                    ArmorDef = HeavyDef;
+                                    IsTalk = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                    IsTalk = false;
+                                }
                                 break;
-                            }
-                       }
+                            case ConsoleKey.D:
+                                if (Money >= 150)
+                                {
+                                    Money = Money - 150;
+                                    Console.WriteLine($"Вы купили Щит! У вас осталось {Money} монет.");
+                                    WeaponDef = ShieldDef;
+                                    WeaponDmg = ShieldDmg;
+                                    IsTalk = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                    IsTalk = false;
+                                }
+                                break;
+                            case ConsoleKey.F:
+                                if (Money >= 100)
+                                {
+                                    Money = Money - 100;
+                                    Console.WriteLine($"Вы купили Лук! У вас осталось {Money} монет.");
+                                    WeaponDef = BowDef;
+                                    WeaponDmg = BowDmg;
+                                    IsTalk = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                    IsTalk = false;
+                                }
+                                break;
+                            case ConsoleKey.G:
+                                if (Money >= 80)
+                                {
+                                    Money = Money - 80;
+                                    Console.WriteLine($"Вы купили Меч! У вас осталось {Money} монет.");
+                                    WeaponDef = SwordDef;
+                                    WeaponDmg = SwordDmg;
+                                    IsTalk = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                    IsTalk = false;
+                                }
+                                break;
+                            case ConsoleKey.H:
+                                if (Money >= 30)
+                                {
+                                    Money = Money - 30;
+                                    Console.WriteLine($"Вы купили Зелье исцеления! У вас осталось {Money} монет.");
+                                    Potion++;
+                                    IsTalk = false;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас недостаточно денег.");
+                                    IsTalk = false;
+                                }
+                                break;
+                            case ConsoleKey.W:
+                                break;
+                            default:
+                                {
+                                    Console.WriteLine("У меня всего 6 ячеек с предметами. Введите номер ячейки.");
+                                    break;
+                                }
+                        }
                     }
                 }
                 if (zone[y, x] == " ?")
@@ -405,7 +301,7 @@ namespace ConsoleApp1
                                         }
                                         if (EnemyDmg - WeaponDef - ArmorDef > 0)
                                         {
-                                        Console.WriteLine($"Вы выпили зелье! Но враг нанёс вам {EnemyDmg - WeaponDef - ArmorDef} урона. Ваше здоровье - {PlayerHp}.");
+                                            Console.WriteLine($"Вы выпили зелье! Но враг нанёс вам {EnemyDmg - WeaponDef - ArmorDef} урона. Ваше здоровье - {PlayerHp}.");
                                         }
                                         else
                                         {
@@ -429,7 +325,7 @@ namespace ConsoleApp1
                                     Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
                                     if (EnemyDmg - WeaponDef - ArmorDef > 0)
                                     {
-                                    Console.WriteLine($"Враг нанес вам {EnemyDmg - WeaponDef - ArmorDef} урона!");
+                                        Console.WriteLine($"Враг нанес вам {EnemyDmg - WeaponDef - ArmorDef} урона!");
                                     }
                                     else
                                     {
@@ -497,11 +393,11 @@ namespace ConsoleApp1
                         {
                             case ConsoleKey.Y:
                                 if (Money >= 20)
-                                { 
-                                Money = Money - 20;
-                                PlayerHp = 100;
-                                Console.WriteLine("Paratus! Вы полностью излечены.");
-                                Console.WriteLine($"У вас теперь {Money} монет.");
+                                {
+                                    Money = Money - 20;
+                                    PlayerHp = 100;
+                                    Console.WriteLine("Paratus! Вы полностью излечены.");
+                                    Console.WriteLine($"У вас теперь {Money} монет.");
                                 }
                                 else
                                 {
@@ -515,8 +411,24 @@ namespace ConsoleApp1
                     }
                 }
 
+                if (zone[y, x] == " )" && _proto_zone.ZoneId == 1) // Перемещение в зону 2
+                {
+                    y = yb;
+                    x = xb;
+                    x = 1;
+                    _proto_zone.ZoneId = 2;
+                }
+
+                if (_proto_zone.ZoneId == 2 && zone[y, x] == " )") // Перемещение в зону 1
+                {
+                    y = yb;
+                    x = xb;
+                    x = 14;
+                    _proto_zone.ZoneId = 1;
+                }
 
                 //Перезапись буфера
+
                 yb = y;
                 xb = x;
 
@@ -524,20 +436,26 @@ namespace ConsoleApp1
                 _proto_zone.RenderPlayer(zone, y, x);
 
                 //Заполнение поля / set
-                if (_proto_zone.ZoneId == 1)
-                {
-                    Console.Clear();
-                    Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg+5}\nМонет: {Money} Зелий: {Potion}\n");
-                Console.WriteLine($"x: {x} y: {y}");
-                    _proto_zone.RenderZone1(zone, y, x);
-                }
-                if (zone[y, x] == " )")
-                {
-                    _proto_zone.ZoneId = 2;
-                    Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5}\nМонет: {Money} Зелий: {Potion}\n");
-                    x = 2;
-                    Room2(zone,y,x);
 
+                switch (_proto_zone.ZoneId)
+                {
+                    case 1:
+                        {
+                            Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5}\nМонет: {Money} Зелий: {Potion}\n");
+                            Console.WriteLine($"x: {x} y: {y}");
+                            Room1(zone, y, x);
+                        }
+                        break;
+                    case 2:
+                        {
+
+                            Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5}\nМонет: {Money} Зелий: {Potion}\n");
+                            Console.WriteLine($"x: {x} y: {y}");
+                            Room2(zone, y, x);
+                        }
+                        break;
+                    default:
+                        break;
                 }
 
                 //Управление
@@ -557,7 +475,7 @@ namespace ConsoleApp1
                         x--;
                         break;
                     default:
-                        
+
                         break;
                 }
                 Console.Clear();

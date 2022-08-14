@@ -38,7 +38,7 @@ internal class Player : Weapon
 internal class Weapon
 {
     int Def { get; set; }
-    public int Dmg { get; set; } 
+    public int Dmg { get; set; }
 }
 
 class Sword : Weapon
@@ -160,6 +160,12 @@ internal struct Zone
                 zone[8, j] = "__";
                 switch (i, j)
                 {
+                    case ( >= 2 and <= 8, 5):
+                        zone[i, j] = " #";
+                        break;
+                    case ( >= 3 and <= 6, 0):
+                        zone[i, j] = " )";
+                        break; ;
                     case (8, 0):
                         zone[i, j] = "|_";
                         break;
@@ -167,12 +173,12 @@ internal struct Zone
                         zone[i, j] = "_|";
                         break;
                     default:
-                        zone[i, j] = " .";
                         break;
                 }
                 Console.Write($" {zone[i, j]}");
             }
             Console.WriteLine("");
+
         }
     }
 }
