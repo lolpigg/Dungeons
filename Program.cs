@@ -352,13 +352,13 @@ namespace ConsoleApp1
                                     break;
                             }
                         }
-                        if (PlayerHp > 0 && EnemyHp < 0)
+                        if (PlayerHp >= 0 && EnemyHp <= 0)
                         {
                             Console.WriteLine($"Ура, победа!");
                             IsFight = false;
                             EnemyDead = true;
                         }
-                        else if (PlayerHp < 0 && EnemyHp > 0)
+                        else if (PlayerHp <= 0 && EnemyHp >= 0)
                         {
                             Console.WriteLine("Вы сдохли как собака. Позор вам.");
                             IsFight = false;
@@ -387,6 +387,7 @@ namespace ConsoleApp1
                         {
                             case ConsoleKey.Y:
                                 Money = Money - 20;
+                                PlayerHp = 100;
                                 Console.WriteLine("Paratus! Вы полностью излечены.");
                                 Console.WriteLine($"У вас теперь {Money} монет.");
                                 break;

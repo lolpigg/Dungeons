@@ -136,6 +136,9 @@ internal struct Zone
                     case (8, 15):
                         zone[i, j] = "_|";
                         break;
+                    case (7, 8):
+                        zone[i, j] = " D";
+                        break;
                     default:
                         break;
                 }
