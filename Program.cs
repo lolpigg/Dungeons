@@ -118,7 +118,7 @@ namespace ConsoleApp1
                                         break;
                                 }
                                 break;
-                            default: return;
+                            default: break;
                         }
                     }
                     if (Book == false && IsTalk == true || Book == true && IsTalk == true && BookReject == true)
@@ -288,12 +288,20 @@ namespace ConsoleApp1
                                 case ConsoleKey.D:
                                     if (Potion > 0)
                                     {
-                                        PlayerHp = PlayerHp + Heal - EnemyDmg;
+                                        PlayerHp = PlayerHp + Heal - EnemyDmg + WeaponDef + ArmorDef;
                                         if (PlayerHp > 100)
                                         {
                                             PlayerHp = 100;
                                         }
-                                        Console.WriteLine($"Вы выпили зелье! Но враг нанёс вам {EnemyDmg}. Ваше здоровье - {PlayerHp}.");
+                                        if (EnemyDmg - WeaponDef - ArmorDef > 0)
+                                        {
+                                        Console.WriteLine($"Вы выпили зелье! Но враг нанёс вам {EnemyDmg - WeaponDef - ArmorDef} урона. Ваше здоровье - {PlayerHp}.");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Вы выпили зелье! Враг не смог пробить вашу защиту! Ваше здоровье - {PlayerHp}");
+                                        }
+                                        Potion--;
                                         Console.WriteLine($"У вас осталось {Potion} зелий.");
                                     }
                                     else
@@ -303,13 +311,41 @@ namespace ConsoleApp1
                                     break;
                                 case ConsoleKey.A:
                                     PlayerHp = PlayerHp - (EnemyDmg - WeaponDef - ArmorDef);
+                                    if (PlayerHp > 100)
+                                    {
+                                        PlayerHp = 100;
+                                    }
                                     EnemyHp = EnemyHp - WeaponDmg - 5;
                                     Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
-                                    Console.WriteLine($"Здоровье врага - {EnemyHp}.");
+                                    if (EnemyDmg - WeaponDef - ArmorDef > 0)
+                                    {
+                                    Console.WriteLine($"Враг нанес вам {EnemyDmg - WeaponDef - ArmorDef} урона!");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Враг не смог пробить вашу защиту!");
+                                    }
+                                    if (EnemyHp > 0)
+                                    {
+                                        Console.WriteLine($"Здоровье врага - {EnemyHp}.");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Здоровье врага - 0!");
+                                    }
                                     break;
                                 case ConsoleKey.S:
-                                    PlayerHp = PlayerHp - EnemyDmg;
-                                    Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
+                                    if (EnemyDmg - WeaponDef - ArmorDef > 0)
+                                    {
+                                        PlayerHp = PlayerHp - (EnemyDmg - WeaponDef - ArmorDef);
+                                        Console.WriteLine($"Враг нанес вам {EnemyDmg - WeaponDef - ArmorDef} урона!");
+                                        Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Враг не смог пробить вашу защиту!");
+                                        Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
+                                    }
                                     Console.WriteLine($"Здоровье врага - {EnemyHp}.");
                                     break;
                                 default:
@@ -326,11 +362,37 @@ namespace ConsoleApp1
                         {
                             Console.WriteLine("Вы сдохли как собака. Позор вам.");
                             IsFight = false;
+                            PlayerHp = 100;
                         }
                         else
                         {
                             Console.WriteLine("Вы успешно сбежали.");
                             IsFight = false;
+                        }
+                    }
+                }
+                if (zone[y, x] == " D")
+                {
+                    y = yb;
+                    x = xb;
+                    if (PlayerHp >= 100)
+                    {
+                        Console.WriteLine("Здравствуй! Я доктор, если тебе нужна помощь, то я могу вылечить тебя за 20 монет.");
+                    }
+                    else if (PlayerHp < 100)
+                    {
+                        Console.WriteLine("Здравствуй! Вижу, ты немного ранен. Я могу вылечить тебя за 20 монет.\n Y - принять N - отказать");
+                        ConsoleKeyInfo HealingDoctor = Console.ReadKey(true);
+                        switch (HealingDoctor.Key)
+                        {
+                            case ConsoleKey.Y:
+                                Money = Money - 20;
+                                Console.WriteLine("Paratus! Вы полностью излечены.");
+                                Console.WriteLine($"У вас теперь {Money} монет.");
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Ut dicis.");
+                                break;
                         }
                     }
                 }
