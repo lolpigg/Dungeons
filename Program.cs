@@ -886,7 +886,7 @@ namespace ConsoleApp1
                 {
                     case 1:
                         {
-                            Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5}\nМонет: {Money} Зелий: {Potion}\n");
+                            Console.Write($"Здоровье: {PlayerHp} Урон:{WeaponDmg + 5 + WizardHelp}\nМонет: {Money} Зелий: {Potion}\n");
                             Console.WriteLine($"x: {x} y: {y}");
                             Room1(zone, y, x);
                         }
