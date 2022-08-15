@@ -11,6 +11,10 @@ namespace ConsoleApp1
         //lets start ma boizz
         public static void Main(string[] args)
         {
+            bool TalkToTrainer = false;
+            int WizardHelp = 0;
+            bool WizardReject = false;
+            bool Strenght = false;
             bool TalkTalk = false;
             bool RewardNPC = false;
             bool IsTalk = false;
@@ -43,6 +47,7 @@ namespace ConsoleApp1
             int PlayerDmg = 5 + WeaponDmg;
             var IsFight = true;
             dynamic[] Invenetary = { Money, Weapon };
+            Random rnd = new Random();
 
             //Спавн игрока
             int y = 2, x = 5;
@@ -321,7 +326,7 @@ namespace ConsoleApp1
                                     {
                                         PlayerHp = 100;
                                     }
-                                    EnemyHp = EnemyHp - WeaponDmg - 5;
+                                    EnemyHp = EnemyHp - WeaponDmg - 5 - WizardHelp;
                                     Console.WriteLine($"Ваше здоровье - {PlayerHp}.");
                                     if (EnemyDmg - WeaponDef - ArmorDef > 0)
                                     {
@@ -366,9 +371,9 @@ namespace ConsoleApp1
                         }
                         else if (PlayerHp <= 0 && EnemyHp >= 0)
                         {
-                            Console.WriteLine("Вы сдохли как собака. Позор вам.");
+                            Console.WriteLine("Вы умерли в схватке с монстром. Ваши кости обглоданы, Витя все еще в опасности, Монстр все еще живой.");
                             IsFight = false;
-                            PlayerHp = 100;
+                            Environment.Exit(0);
                         }
                         else
                         {
@@ -387,7 +392,7 @@ namespace ConsoleApp1
                     }
                     else if (PlayerHp < 100)
                     {
-                        Console.WriteLine("Здравствуй! Вижу, ты немного ранен. Я могу вылечить тебя за 20 монет.\n Y - принять N - отказать");
+                        Console.WriteLine("Здравствуй! Вижу, ты немного ранен. Я могу вылечить тебя за 20 монет.\n Y - Принять N - Отказать");
                         ConsoleKeyInfo HealingDoctor = Console.ReadKey(true);
                         switch (HealingDoctor.Key)
                         {
@@ -410,7 +415,121 @@ namespace ConsoleApp1
                         }
                     }
                 }
+                if (zone[y, x] == " O")
+                {
+                    int TrapDamage = rnd.Next(5, 15);
+                    PlayerHp = PlayerHp - TrapDamage;
+                    if (PlayerHp > 0)
+                    {
+                        Console.WriteLine($"Вы попали в ловушку и получили {TrapDamage} урона! Ваше нынешнее здоровье - {PlayerHp}");
+                    }
+                    else
+                    {
+                        PlayerHp = 0;
+                        Console.WriteLine("Увы и ах, вы умерли от попадания в ловушку! Впредь будьте осторожнее...");
+                        Environment.Exit(0);
+                    }
+                }
+                if (zone[y, x] == " U")
+                {
+                    y = yb;
+                    x = xb;
+                    Console.WriteLine("Вы стоите перед огромными дверьми Короля Чернокнижников. Чтобы открыть их, нужна немалая сила.\nПопытаться открыть их? Y - Да N - Нет");
+                    ConsoleKeyInfo WarlockDoor = Console.ReadKey(true);
+                    switch (WarlockDoor.Key)
+                    {
+                        case ConsoleKey.Y:
+                            if (Strenght == true)
+                            {
+                                Console.WriteLine("Вы успешно открыли дверь, приложив немалую силу, которая, благо, у вас имеется!");
+                                if (x == 11)
+                                {
+                                    x = x - 2;
+                                }
+                                else if (x == 9)
+                                {
+                                    x = x + 2;
+                                }
+                            }
+                            else
+                            {
+                                int DoorDmg = rnd.Next(1, 20);
+                                PlayerHp = PlayerHp - DoorDmg;
+                                Console.WriteLine($"Хоть вы и применили всю свою силу, открыть дверь не удалось. Вы растянули мышцы и получили {DoorDmg} урона.\nВаше нынешнее здоровье - {PlayerHp}.");
+                            }
+                            break;
+                        case ConsoleKey.N:
+                            Console.WriteLine("Вы решили не открывать двери.\nНа мгновение вам показалось, что дверь хочет, чтобы вы ее открыли.");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (zone[y, x] == " !")
+                {
+                    Console.WriteLine("Управление - WASD. Выход - Esc. ");
+                }
+                if (zone[y, x] == " W")
+                {
+                    y = yb;
+                    x = xb;
+                    Console.WriteLine("Приветствую.");
+                    if (Book == true && BookReject == true && WizardReject == false)
+                    {
+                        Console.WriteLine("Ого. Утопия. Не думал что встречу ее здесь. \nСтавлю свою мантию на то, что торговец пытался выманить ее у тебя, так ведь?\nСлушай, это книга древнего Архивариуса Антонидаса. \nЯ могу изучить ее, чтобы улучшить твои, и разумеется, свои боевые навыки.\nНо после этого книга пропадет, на ней стоит заклинание.\n Y - Принять N - Отказаться");
+                        ConsoleKeyInfo WizardDeal = Console.ReadKey(true);
+                        switch (WizardDeal.Key)
+                        {
+                            case ConsoleKey.Y:
+                                WizardHelp = 10;
+                                Console.WriteLine("Спасибо, ты поступил правильно. Твои боевые навыки должны были возрасти.");
+                                Console.WriteLine("Ваш урон возрос на 10 очков!");
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Жаль. Я буду ждать здесь, быть может, передумаешь.");
+                                break;
+                            default:
+                                break;
+                        }
+                     
+                    }
+                }
+                if (zone[y, x] == " G")
+                {
+                    y = yb;
+                    x = xb;
+                    Console.WriteLine("Ты находишься в покоях Короля Чернокнижников. Если у тебя нет дела ко мне - проваливай.");
+                }
+                if (zone[y, x] == " %")
+                {
+                    y = yb;
+                    x = xb;
+                    if (TalkToTrainer == false) 
+                    { 
+                        Console.WriteLine("Перед вами лежат гантели. Для вас они не имеют никакого значения.");
+                    }
+                    else 
+                    {
+                        Console.WriteLine("Это гантели, о которых говорил Тренер. Вы используете их чтобы повысить свои силовые навыки.");
+                        Strenght = true;
+                        Console.WriteLine("Вы стали сильнее!");
+                    }
 
+                }
+                if (zone[y, x] == " T")
+                {
+                    y = yb;
+                    x = xb;   
+                    if (Strenght == false)
+                    {
+                        Console.WriteLine("Привет, салага! Я тренер. Могу стать и твоим. \nЕсли согласен, бери гантели справа от меня и занимайся на здоровье.");
+                        TalkToTrainer = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ого, уже виден прогресс! Продолжай в том же духе!");
+                    }
+                }
                 if (zone[y, x] == " )" && _proto_zone.ZoneId == 1) // Перемещение в зону 2
                 {
                     y = yb;
@@ -418,7 +537,7 @@ namespace ConsoleApp1
                     x = 1;
                     _proto_zone.ZoneId = 2;
                 }
-
+                
                 if (_proto_zone.ZoneId == 2 && zone[y, x] == " )") // Перемещение в зону 1
                 {
                     y = yb;
@@ -473,6 +592,9 @@ namespace ConsoleApp1
                         break;
                     case ConsoleKey.A:
                         x--;
+                        break;
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
                         break;
                     default:
 

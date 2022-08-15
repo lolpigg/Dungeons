@@ -106,6 +106,15 @@ internal struct Zone
                 zone[8, j] = "__";
                 switch (i, j)
                 {
+                    case (7, 1):
+                        zone[i, j] = " T";
+                        break;
+                    case (7, 2):
+                        zone[i, j] = " %";
+                        break;
+                    case (1, 5):
+                        zone[i, j] = " !";
+                        break;
                     case (3, 6):
                     case (3, 5):
                     case (4, 5):
@@ -160,8 +169,26 @@ internal struct Zone
                 zone[8, j] = "__";
                 switch (i, j)
                 {
-                    case ( >= 2 and <= 8, 5):
+                    case (2, 2):
+                        zone[i, j] = " W";
+                        break;
+                    case ( >= 2 and <= 6, 5):
+                    case (6, >= 6 and <= 10):
+                    case (2, >= 6 and <= 10):
+                    case (5, 10):
+                    case (3, 10):
                         zone[i, j] = " #";
+                        break;
+                    case (4, 6):
+                        zone[i, j] = " G";
+                        break;
+
+                    case (3, 11):
+                    case (5, 11):
+                        zone[i, j] = " O";
+                        break;
+                    case (4, 10):
+                        zone[i, j] = " U";
                         break;
                     case ( >= 3 and <= 6, 0):
                         zone[i, j] = " )";
