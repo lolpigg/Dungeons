@@ -11,6 +11,12 @@ namespace ConsoleApp1
         //lets start ma boizz
         public static void Main(string[] args)
         {
+            bool NpcReward = false;
+            bool WizardReward = false;
+            bool NpcKilled = false;
+            bool WizardKill = false;
+            bool WizardMoney = false;
+            bool SecondQuest = false;
             bool TalkToTrainer = false;
             int WizardHelp = 0;
             bool WizardReject = false;
@@ -264,9 +270,304 @@ namespace ConsoleApp1
                     {
                         Console.WriteLine("Прошу, поторопись. Не стоит заставлять монстра ждать, он многое может натворить.");
                     }
-                    else if ((EnemyDead == true) && (RewardNPC == true))
+                    else if ((EnemyDead == true) && (RewardNPC == true) && SecondQuest == false)
                     {
-                        Console.WriteLine("О, мой дорогой друг! Я снова нуждаюсь в твоей помощи. \nМой давний знакомый задолжал мне деньги. Половина твоя. Он находится в соседней комнате, удачи!");
+
+                        Console.WriteLine("О, мой дорогой друг! Я снова нуждаюсь в твоей помощи. \n Нужно забрать долг у одного человека, сможешь?");
+                        Console.WriteLine("Y - Принять задание, N - Я таким не занимаюсь.");
+                        ConsoleKeyInfo NpcQuest = Console.ReadKey(true);
+                        switch (NpcQuest.Key)
+                        {
+                            case ConsoleKey.Y:
+                                SecondQuest = true;
+                                Console.WriteLine("Этот человек - маг. Половина от денег твоя. Удачи!");
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Как пожелаешь, но лучше бы тебе передумать.");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if ((EnemyDead == true) && (RewardNPC == true) && SecondQuest == true && WizardMoney == false && WizardKill == false)
+                    {
+                        Console.WriteLine("Верни мне долг мага.");
+                    }
+                    else if (WizardMoney == true && WizardKill == false && NpcKilled == false && NpcReward == false)
+                    {
+                        Console.WriteLine("Молодец! Я в тебе не сомневался! Давай сюда деньги, дам тебе половину.");
+                        Console.WriteLine("Y - Дать, N - После того, как убью тебя.");
+                        ConsoleKeyInfo WizardMoneyNpc = Console.ReadKey(true);
+                        switch (WizardMoneyNpc.Key)
+                        {
+                            case ConsoleKey.Y:
+                                Console.WriteLine("Отлично, вот твои деньги.");
+                                Money = Money + 250;
+                                Console.WriteLine($"У вас теперь {Money} монет.");
+                                NpcReward = true;
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Ах ты ж сука! На тебе!");
+                                Console.WriteLine("Y - Защитить лицо руками от удара, N - Присесть.");
+                                ConsoleKeyInfo Fight = Console.ReadKey(true);
+                                switch (Fight.Key)
+                                {
+                                    case ConsoleKey.Y:
+                                        Console.WriteLine("Он ударил вам в висок, пока вы судорожно прикрывали лицо. Он нанес вам 20 урона.");
+                                        PlayerHp = PlayerHp - 20;
+                                        if (PlayerHp <= 0)
+                                        {
+                                            Console.WriteLine("Вы скончались от яростных ударов Вити.");
+                                            Environment.Exit(0);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Ваше нынешнее здоровье - {PlayerHp}");
+                                            Console.WriteLine("Он открылся перед нападением, находясь в кураже от удара.\n Y - Точный удар, N - Таран");
+                                            ConsoleKeyInfo Fight6 = Console.ReadKey(true);
+                                            switch (Fight6.Key)
+                                            {
+                                                case ConsoleKey.Y:
+                                                    Console.WriteLine("Он схватил вашу руку и заломал ее. Вы проиграли. Вы будете умирать долго и мучительно.");
+                                                    Environment.Exit(0);
+                                                    break;
+                                                case ConsoleKey.N:
+                                                    Console.WriteLine("Повалив его, он сильно ударился головой, оставалось только добить его.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                    NpcKilled = true;
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("Вы бездействовали и вас убили.");
+                                                    Environment.Exit(0);
+                                                    break;
+                                            }
+                                        }
+
+                                        break;
+                                    case ConsoleKey.N:
+                                        Console.WriteLine("Вам попался удачный момент для удара, когда Витя раскрылся и замахнулся на вас.\nY - Апперкот, N - Удар по паху.");
+                                        ConsoleKeyInfo Fight3 = Console.ReadKey(true);
+                                        switch (Fight3.Key)
+                                        {
+                                            case ConsoleKey.Y:
+                                                if (Strenght == true)
+                                                {
+                                                    Console.WriteLine("Вы сокрушающе ударили Витю, отчего он упал замертво.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                    NpcKilled = true;
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("Этот удар нанес сильный урон Вите. Он потянул руки к носу и согнулся.\n Y - Добить ударом колена. N - Ударить кулаком по затылку.");
+                                                    ConsoleKeyInfo Fight5 = Console.ReadKey(true);
+                                                    switch (Fight5.Key)
+                                                    {
+                                                        case ConsoleKey.Y:
+                                                            if (Strenght == true)
+                                                            {
+                                                                Console.WriteLine("Хоть он и прикрывался руками, вы пробили его защиту.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                                NpcKilled = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                Console.WriteLine("Вы не смогли пробить его защиту из рук. Он контратаковал, воспользуясь вашим смятением.\nВы умерли.");
+                                                                Environment.Exit(0);
+                                                            }
+                                                            break;
+                                                        case ConsoleKey.N:
+                                                            Console.WriteLine("Сильный удар прекратил существование Вити.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                            NpcKilled = true;
+                                                            break;
+                                                        default:
+                                                            Console.WriteLine("Вы бездействовали и вас убили.");
+                                                            Environment.Exit(0);
+                                                            break;
+                                                    }
+                                                }
+                                                break;
+                                            case ConsoleKey.N:
+                                                Console.WriteLine("Витя согнулся и раскрыл лицо для удара.");
+                                                Console.WriteLine("Y - Добить ударом колена, N - Завершающий апперкот.");
+                                                ConsoleKeyInfo Fight4 = Console.ReadKey(true);
+                                                switch (Fight4.Key)
+                                                {
+                                                    case ConsoleKey.Y:
+                                                        Console.WriteLine("Витя заблокировал ваш удар руками, уже притянутыми к носу. \n Вас повалили на пол. Y - Блокировать удары в голову, N - Резкий хук справа.");
+                                                        ConsoleKeyInfo Fight5 = Console.ReadKey(true);
+                                                        switch (Fight5.Key)
+                                                        {
+                                                            case ConsoleKey.Y:
+                                                                Console.WriteLine("Вы умерли от бесчисленных ударов по печени.");
+                                                                Environment.Exit(0);
+                                                                break;
+                                                            case ConsoleKey.N:
+                                                                Console.WriteLine("Противник не ожидал хука, и подставился. Вы победили.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                                NpcKilled = true;
+                                                                break;
+                                                            default:
+                                                                Console.WriteLine("Вы бездействовали и вас убили.");
+                                                                Environment.Exit(0);
+                                                                break;
+                                                        }
+                                                        break;
+                                                    case ConsoleKey.N:
+                                                        Console.WriteLine("Точный и сильный удар не оставил противнику ни одного шанса. \nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                        NpcKilled = true;
+                                                        break;
+                                                    default:
+                                                        Console.WriteLine("Вы бездействовали и вас убили.");
+                                                        Environment.Exit(0);
+                                                        break;
+                                                }
+                                                break;
+                                            default:
+                                                Console.WriteLine("Вы бездействовали и вас убили.");
+                                                Environment.Exit(0);
+                                                break;
+                                        }
+                                        NpcKilled = true;
+                                        break;
+                                    default:
+                                        Console.WriteLine("Вы бездействовали и вас убили.");
+                                        Environment.Exit(0);
+                                        break;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (WizardKill == true && NpcKilled == false)
+                    {
+                        Console.WriteLine("Ах ты ж сука! Я все слышал! На тебе!");
+                        Console.WriteLine("Y - Защитить лицо руками от удара, N - Присесть.");
+                        ConsoleKeyInfo Fight = Console.ReadKey(true);
+                        switch (Fight.Key)
+                        {
+                            case ConsoleKey.Y:
+                                Console.WriteLine("Он ударил вам в висок, пока вы судорожно прикрывали лицо. Он нанес вам 20 урона.");
+                                PlayerHp = PlayerHp - 20;
+                                if (PlayerHp <= 0)
+                                {
+                                    Console.WriteLine("Вы скончались от яростных ударов Вити.");
+                                    Environment.Exit(0);
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Ваше нынешнее здоровье - {PlayerHp}");
+                                    Console.WriteLine("Он открылся перед нападением, находясь в кураже от удара.\n Y - Точный удар, N - Таран");
+                                    ConsoleKeyInfo Fight6 = Console.ReadKey(true);
+                                    switch (Fight6.Key)
+                                    {
+                                        case ConsoleKey.Y:
+                                            Console.WriteLine("Он схватил вашу руку и заломал ее. Вы проиграли. Вы будете умирать долго и мучительно.");
+                                            Environment.Exit(0);
+                                            break;
+                                        case ConsoleKey.N:
+                                            Console.WriteLine("Повалив его, он сильно ударился головой, оставалось только добить его.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                            NpcKilled = true;
+                                            break;
+                                        default:
+                                            Console.WriteLine("Вы бездействовали и вас убили.");
+                                            Environment.Exit(0);
+                                            break;
+                                    }
+                                }
+
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Вам попался удачный момент для удара, когда Витя раскрылся и замахнулся на вас.\nY - Апперкот, N - Удар по паху.");
+                                ConsoleKeyInfo Fight3 = Console.ReadKey(true);
+                                switch (Fight3.Key)
+                                {
+                                    case ConsoleKey.Y:
+                                        if (Strenght == true)
+                                        {
+                                            Console.WriteLine("Вы сокрушающе ударили Витю, отчего он упал замертво.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                            NpcKilled = true;
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Этот удар нанес сильный урон Вите. Он потянул руки к носу и согнулся.\n Y - Добить ударом колена. N - Ударить кулаком по затылку.");
+                                            ConsoleKeyInfo Fight5 = Console.ReadKey(true);
+                                            switch (Fight5.Key)
+                                            {
+                                                case ConsoleKey.Y:
+                                                    if (Strenght == true)
+                                                    {
+                                                        Console.WriteLine("Хоть он и прикрывался руками, вы пробили его защиту.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                        NpcKilled = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine("Вы не смогли пробить его защиту из рук. Он контратаковал, воспользуясь вашим смятением.\nВы умерли.");
+                                                        Environment.Exit(0);
+                                                    }
+                                                    break;
+                                                case ConsoleKey.N:
+                                                    Console.WriteLine("Сильный удар прекратил существование Вити.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                    NpcKilled = true;
+                                                    break;
+                                                default:
+                                                    Console.WriteLine("Вы бездействовали и вас убили.");
+                                                    Environment.Exit(0);
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    case ConsoleKey.N:
+                                        Console.WriteLine("Витя согнулся и раскрыл лицо для удара.");
+                                        Console.WriteLine("Y - Добить ударом колена, N - Завершающий апперкот.");
+                                        ConsoleKeyInfo Fight4 = Console.ReadKey(true);
+                                        switch (Fight4.Key)
+                                        {
+                                            case ConsoleKey.Y:
+                                                Console.WriteLine("Витя заблокировал ваш удар руками, уже притянутыми к носу. \n Вас повалили на пол. Y - Блокировать удары в голову, N - Резкий хук справа.");
+                                                ConsoleKeyInfo Fight5 = Console.ReadKey(true);
+                                                switch (Fight5.Key)
+                                                {
+                                                    case ConsoleKey.Y:
+                                                        Console.WriteLine("Вы умерли от бесчисленных ударов по печени.");
+                                                        Environment.Exit(0);
+                                                        break;
+                                                    case ConsoleKey.N:
+                                                        Console.WriteLine("Противник не ожидал хука, и подставился. Вы победили.\nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                        NpcKilled = true;
+                                                        break;
+                                                    default:
+                                                        Console.WriteLine("Вы бездействовали и вас убили.");
+                                                        Environment.Exit(0);
+                                                        break;
+                                                }
+                                                break;
+                                            case ConsoleKey.N:
+                                                Console.WriteLine("Точный и сильный удар не оставил противнику ни одного шанса. \nВы пресекли работорговлю и спасли семью волшебника ценой убийства.");
+                                                NpcKilled = true;
+                                                break;
+                                            default:
+                                                Console.WriteLine("Вы бездействовали и вас убили.");
+                                                Environment.Exit(0);
+                                                break;
+                                        }
+                                        break;
+                                    default:
+                                        Console.WriteLine("Вы бездействовали и вас убили.");
+                                        Environment.Exit(0);
+                                        break;
+                                }
+                                NpcKilled = true;
+                                break;
+                            default:
+                                Console.WriteLine("Вы бездействовали и вас убили.");
+                                Environment.Exit(0);
+                                break;
+                        }
+                    }
+                    else if (NpcReward == false && NpcKilled == true)
+                    {
+                        Console.WriteLine("Вы смотрите на гниющий труп Вити. Поделом - думаете вы.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Привет!");
                     }
                 }
                 if (zone[y, x] == " X")
@@ -474,7 +775,7 @@ namespace ConsoleApp1
                     y = yb;
                     x = xb;
                     Console.WriteLine("Приветствую.");
-                    if (Book == true && BookReject == true && WizardReject == false)
+                    if (Book == true && SecondQuest == false || Book == true && WizardReward == true)
                     {
                         Console.WriteLine("Ого. Утопия. Не думал что встречу ее здесь. \nСтавлю свою мантию на то, что торговец пытался выманить ее у тебя, так ведь?\nСлушай, это книга древнего Архивариуса Антонидаса. \nЯ могу изучить ее, чтобы улучшить твои, и разумеется, свои боевые навыки.\nНо после этого книга пропадет, на ней стоит заклинание.\n Y - Принять N - Отказаться");
                         ConsoleKeyInfo WizardDeal = Console.ReadKey(true);
@@ -491,7 +792,32 @@ namespace ConsoleApp1
                             default:
                                 break;
                         }
-                     
+                    }
+                    else if (SecondQuest == true && WizardKill == false && WizardMoney == false)
+                    {
+                        Console.WriteLine("Тебя прислал Витя, так? Мда, плохо получается.\nПослушай, он плохой человек. Он шантажирует меня держа мою семью в заложниках наверху.\nОн не тот, кого за себя выдает. \nУбей его, и я дам тебе в два раза больше чем дал бы он.");
+                        Console.WriteLine("Y - Хорошо, я сделаю это. N - Долг есть долг. Возвращай.");
+                        ConsoleKeyInfo NpcKill = Console.ReadKey(true);
+                        switch (NpcKill.Key)
+                        {
+                            case ConsoleKey.Y:
+                                Console.WriteLine("Я рассчитываю на тебя. Сделай всем нам одолжение.");
+                                WizardKill = true;
+                                break;
+                            case ConsoleKey.N:
+                                Console.WriteLine("Эх. Держи свои деньги.");
+                                WizardMoney = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (NpcKilled == true && WizardReward == false)
+                    {
+                        Console.WriteLine("Спасибо тебе. Большое тебе спасибо. Вот твои деньги. Моя семья и я будем тебе благодарны всю жизнь.");
+                        Money = Money + 500;
+                        Console.WriteLine($"У вас теперь {Money} монет.");
+                        WizardReward = true;
                     }
                 }
                 if (zone[y, x] == " G")
